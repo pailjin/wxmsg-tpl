@@ -124,4 +124,24 @@ WxMsgTpl.prototype.sendMessage = function (args) {
   });
   return deferred.promise;
 };
+
+WxMsgTpl.prototype.getAccessToken = function (args) {
+  var deferred = Q.defer();
+  if (typeof args === 'undefined' || args == "" || args == null) {
+    throw new Error('args is not illegal');
+  }
+
+  var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+args.appid+"&secret="+args.secret;
+  request(url, function(err, response, data){
+    if (err) {
+      deferred.reject(err);
+    } else {
+      data = JSON.parse(data);
+      //this.access_token=data.access_token;
+      deferred.resolve(data);
+    }
+  });
+  return deferred.promise;
+};
+
 module.exports = WxMsgTpl;
